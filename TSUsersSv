@@ -24,22 +24,30 @@ try
     	$unixTime = time();
     	$realTime = date('[Y-m-d] [H:i:s]',$unixTime);
     	echo $realTime."\t[INFO] VirtualServer information: \n";
-    	echo "\tPort: ".$sv["virtualserver_port"]."\n";
-    	echo "\tID: ".$sv["virtualserver_id"]."\n";
-    	echo "\tName: ".$sv["virtualserver_name"]."\n";
-    	echo "\tStatus: ".$sv["virtualserver_status"]."\n";
-    	echo "\tClients online: ".$sv["virtualserver_clientsonline"]."\n";
-    	echo "\tClients query online: ".$sv["virtualserver_queryclientsonline"]."\n";
-    	echo "\tMax slots: ".$sv["virtualserver_maxclients"]."\n";
+        if ($sv["virtualserver_status"] == "online")
+        {
+    	   echo "\tPort: ".$sv["virtualserver_port"]."\n";
+    	   echo "\tID: ".$sv["virtualserver_id"]."\n";
+    	   echo "\tName: ".$sv["virtualserver_name"]."\n";
+    	   echo "\tStatus: ".$sv["virtualserver_status"]."\n";
+    	   echo "\tClients online: ".$sv["virtualserver_clientsonline"]."\n";
+    	   echo "\tClients query online: ".$sv["virtualserver_queryclientsonline"]."\n";
+    	   echo "\tMax slots: ".$sv["virtualserver_maxclients"]."\n";
 
-    	$clientsOnline = $sv["virtualserver_clientsonline"];
-    	$maxSlots = $sv["virtualserver_maxclients"];
-    	$clientsOnlineTotal = $clientsOnlineTotal + $clientsOnline;
-    	$maxSlotsTotal = $maxSlotsTotal + $maxSlots;
-    
+    	   $clientsOnline = $sv["virtualserver_clientsonline"];
+    	   $maxSlots = $sv["virtualserver_maxclients"];
+    	   $clientsOnlineTotal = $clientsOnlineTotal + $clientsOnline;
+    	   $maxSlotsTotal = $maxSlotsTotal + $maxSlots;
+        }
+        else
+        {
+            echo "\tPort: ".$sv["virtualserver_port"]."\n";
+            echo "\tID: ".$sv["virtualserver_id"]."\n";
+            echo "\tStatus: ".$sv["virtualserver_status"]."\n";
+        }
 	    $unixTime = time();
     	$realTime = date('[Y-m-d] [H:i:s]',$unixTime);
-    	echo $realTime."\t[INFO] VirtualServer done. Users online: {$clientsOnline}. Slots: {$maxSlots}.\n\n";
+    	echo $realTime."\t[INFO] VirtualServer port: {$sv["virtualserver_port"]} done.\n\n";
 	}
 
     $unixTime = time();
