@@ -1,0 +1,57 @@
+<?php
+/*/////////
+//Agusanz//
+*//////////
+require_once("libraries/TeamSpeak3/TeamSpeak3.php");
+
+TeamSpeak3::init();
+//Config
+$user = "serveradmin";
+$pass ="password";
+$serverIP = "127.0.0.1";
+$serverQueryPort = "10011";
+$nickname = "BotNameSv";
+
+try
+{
+	$clientsOnlineTotal = 0;
+	$maxSlotsTotal = 0;
+
+	$ts3 = TeamSpeak3::factory("serverquery://{$user}:{$pass}@{$serverIP}:{$serverQueryPort}&blocking=0&nickname={$nickname}");
+	$svList = $ts3->serverList();
+    foreach ($svList as $sv)
+    {
+    	$unixTime = time();
+    	$realTime = date('[Y-m-d] [H:i:s]',$unixTime);
+    	echo $realTime."\t[INFO] VirtualServer information: \n";
+    	echo "\tPort: ".$sv["virtualserver_port"]."\n";
+    	echo "\tID: ".$sv["virtualserver_id"]."\n";
+    	echo "\tName: ".$sv["virtualserver_name"]."\n";
+    	echo "\tStatus: ".$sv["virtualserver_status"]."\n";
+    	echo "\tClients online: ".$sv["virtualserver_clientsonline"]."\n";
+    	echo "\tClients query online: ".$sv["virtualserver_queryclientsonline"]."\n";
+    	echo "\tMax slots: ".$sv["virtualserver_maxclients"]."\n";
+
+    	$clientsOnline = $sv["virtualserver_clientsonline"];
+    	$maxSlots = $sv["virtualserver_maxclients"];
+    	$clientsOnlineTotal = $clientsOnlineTotal + $clientsOnline;
+    	$maxSlotsTotal = $maxSlotsTotal + $maxSlots;
+    
+	    $unixTime = time();
+    	$realTime = date('[Y-m-d] [H:i:s]',$unixTime);
+    	echo $realTime."\t[INFO] VirtualServer done. Users online: {$clientsOnline}. Slots: {$maxSlots}.\n\n";
+	}
+
+    $unixTime = time();
+    $realTime = date('[Y-m-d] [H:i:s]',$unixTime);
+    echo $realTime."\t[INFO] Total clients online: ".$clientsOnlineTotal."\n";
+    echo $realTime."\t[INFO] Total slots : ".$maxSlotsTotal."\n";
+    die($realTime."\t[INFO] Finished.\n");
+}
+catch(Exception $e)
+{
+    $unixTime = time();
+    $realTime = date('[Y-m-d] [H:i:s]',$unixTime);
+    echo "Failed\n";
+    die($realTime."\t[ERROR]  " . $e->getMessage() . "\n". $e->getTraceAsString() ."\n");
+}
